@@ -76,9 +76,7 @@ export default {
 
 # API
 
-## Instance Methods
-
-### `v-dragging="{ item: color, list: colors, group: 'color' }"`
+`v-dragging="{ item: color, list: colors, group: 'color' }"`
 
 #### Arguments:
 
