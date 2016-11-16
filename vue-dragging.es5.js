@@ -111,6 +111,8 @@ var vueDragging = function (Vue, options) {
     function handleDragEnter(e) {
         var el = void 0;
         if (e.type === 'touchmove') {
+            e.stopPropagation();
+            e.preventDefault();
             el = getOverElementFromTouch(e);
             el = getBlockEl(el);
         } else {
@@ -232,7 +234,6 @@ var vueDragging = function (Vue, options) {
         });
     } else {
         Vue.directive('dragging', {
-            bind: lazyLoadHandler,
             update: function update(newValue, oldValue) {
                 addDragItem(this.el, {
                     modifiers: this.modifiers,
