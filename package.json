@@ -1,0 +1,41 @@
+{
+  "name": "vue-dragging",
+  "version": "0.2.3",
+  "description": "makes your elements draggable in Vue",
+  "main": "vue-dragging.es5.js",
+  "scripts": {
+    "start": "node build"
+  },
+  "dependencies": {
+    "es6-map": "^0.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hilongjw/vue-draging.git"
+  },
+  "keywords": [
+    "vue-dragging",
+    "vue",
+    "draggable",
+    "drag",
+    "drop",
+    "html5",
+    "draggable",
+    "droppable",
+    "drag-and-drop",
+    "dnd"
+  ],
+  "author": "Awe <hilongjw@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/hilongjw/vue-draging/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-polyfill": "^6.13.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-es2015-rollup": "^1.2.0",
+    "rollup": "^0.35.10",
+    "rollup-plugin-babel": "^2.6.1"
+  }
+}
