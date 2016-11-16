@@ -6,7 +6,7 @@ var version = process.env.VERSION || require('./package.json').version
 
 var banner =
   '/*!\n' +
-  ' * Vue-dragging.js v' + version + '\n' +
+  ' * Awe-dnd v' + version + '\n' +
   ' * (c) ' + new Date().getFullYear() + ' Awe <hilongjw@gmail.com>\n' +
   ' * Released under the MIT License.\n' +
   ' */'
@@ -23,7 +23,7 @@ rollup.rollup({
     }).code)
 })
 .then(() => {
-    console.log('Vue-dragging.js v' + version + ' builded')
+    console.log('Awe-dnd v' + version + ' builded')
 })
 .catch(console.log)
 

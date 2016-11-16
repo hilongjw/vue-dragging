@@ -1,5 +1,5 @@
 /*!
- * Vue-dragging.js v0.2.3
+ * Awe-dnd v0.2.5
  * (c) 2016 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
