@@ -19,7 +19,7 @@ From npm:
 
 ``` sh
 
-$ npm install awe-dragging --save
+$ npm install awe-dnd --save
 
 ```
 
@@ -28,9 +28,9 @@ $ npm install awe-dragging --save
 ```javascript
 //main.js
 
-import VueDragging from 'vue-dragging'
+import VueDND from 'awe-dnd'
 
-Vue.use(VueDragging)
+Vue.use(VueDND)
 ```
 
 ```html
