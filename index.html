@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Vue-draging by hilongjw</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Vue-draging</h1>
+      <h2 class="project-tagline">A sortable list directive with Vue</h2>
+      <a href="https://github.com/hilongjw/vue-draging" class="btn">View on GitHub</a>
+      <a href="https://github.com/hilongjw/vue-draging/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/hilongjw/vue-draging/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="awe-dnd" class="anchor" href="#awe-dnd" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Awe-dnd</h1>
+
+<p>Makes your elements draggable in Vue. </p>
+
+<p>See Demo: <a href="http://hilongjw.github.io/vue-dragging/">http://hilongjw.github.io/vue-dragging/</a></p>
+
+<p>Some of goals of this project worth noting include:</p>
+
+<ul>
+<li>support desktop and mobile </li>
+<li>Vue data-driven philosophy</li>
+<li>Supports both of Vue 1.0 and Vue 2.0</li>
+</ul>
+
+<h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Requirements</h2>
+
+<ul>
+<li>Vue: ^1.0.0 or ^2.0.0 </li>
+</ul>
+
+<h2>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install</h2>
+
+<p>From npm:</p>
+
+<div class="highlight highlight-source-shell"><pre>
+$ npm install awe-dnd --save
+</pre></div>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">//main.js</span>
+
+<span class="pl-k">import</span> <span class="pl-smi">VueDND</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>awe-dnd<span class="pl-pds">'</span></span>
+
+<span class="pl-smi">Vue</span>.<span class="pl-en">use</span>(VueDND)</pre></div>
+
+<div class="highlight highlight-text-html-basic"><pre><span class="pl-c">&lt;!--your.vue--&gt;</span>
+<span class="pl-s1">&lt;<span class="pl-ent">script</span>&gt;</span>
+<span class="pl-s1"><span class="pl-k">export</span> <span class="pl-v">default</span> {</span>
+<span class="pl-s1">  <span class="pl-en">data</span> () {</span>
+<span class="pl-s1">    <span class="pl-k">return</span> {</span>
+<span class="pl-s1">        colors<span class="pl-k">:</span> [{</span>
+<span class="pl-s1">            text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Aquamarine<span class="pl-pds">"</span></span></span>
+<span class="pl-s1">        }, {</span>
+<span class="pl-s1">            text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Hotpink<span class="pl-pds">"</span></span></span>
+<span class="pl-s1">        }, {</span>
+<span class="pl-s1">            text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Gold<span class="pl-pds">"</span></span></span>
+<span class="pl-s1">        }, {</span>
+<span class="pl-s1">            text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Crimson<span class="pl-pds">"</span></span></span>
+<span class="pl-s1">        }, {</span>
+<span class="pl-s1">            text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Blueviolet<span class="pl-pds">"</span></span></span>
+<span class="pl-s1">        }, {</span>
+<span class="pl-s1">            text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Lightblue<span class="pl-pds">"</span></span></span>
+<span class="pl-s1">        }, {</span>
+<span class="pl-s1">            text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Cornflowerblue<span class="pl-pds">"</span></span></span>
+<span class="pl-s1">        }, {</span>
+<span class="pl-s1">            text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Skyblue<span class="pl-pds">"</span></span></span>
+<span class="pl-s1">        }, {</span>
+<span class="pl-s1">            text<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Burlywood<span class="pl-pds">"</span></span></span>
+<span class="pl-s1">        }]</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1">  }</span>
+<span class="pl-s1">}</span>
+<span class="pl-s1">&lt;/<span class="pl-ent">script</span>&gt;</span>
+
+&lt;<span class="pl-ent">template</span>&gt;
+  &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>color-list<span class="pl-pds">"</span></span>&gt;
+      &lt;<span class="pl-ent">div</span> 
+          <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>color-item<span class="pl-pds">"</span></span> 
+          <span class="pl-e">v-for</span>=<span class="pl-s"><span class="pl-pds">"</span>color in colors<span class="pl-pds">"</span></span> <span class="pl-e">v-dragging</span>=<span class="pl-s"><span class="pl-pds">"</span>{ item: color, list: colors, group: 'color' }<span class="pl-pds">"</span></span>
+          :<span class="pl-e">key</span>=<span class="pl-s"><span class="pl-pds">"</span>color.text<span class="pl-pds">"</span></span>
+      &gt;{{color.text}}&lt;/<span class="pl-ent">div</span>&gt;
+  &lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">template</span>&gt;</pre></div>
+
+<h1>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API</h1>
+
+<p><code>v-dragging="{ item: color, list: colors, group: 'color' }"</code></p>
+
+<h4>
+<a id="arguments" class="anchor" href="#arguments" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arguments:</h4>
+
+<ul>
+<li><code>{item} Object</code></li>
+<li><code>{list} Array</code></li>
+<li>
+<p><code>{group} String</code></p>
+
+<p><code>group</code> is unique key of dragable list.</p>
+</li>
+</ul>
+
+<h4>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h4>
+
+<div class="highlight highlight-text-html-basic"><pre><span class="pl-c">&lt;!-- Vue2.0 --&gt;</span>
+&lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>color-list<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">div</span> 
+        <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>color-item<span class="pl-pds">"</span></span> 
+        <span class="pl-e">v-for</span>=<span class="pl-s"><span class="pl-pds">"</span>color in colors<span class="pl-pds">"</span></span> <span class="pl-e">v-dragging</span>=<span class="pl-s"><span class="pl-pds">"</span>{ item: color, list: colors, group: 'color' }<span class="pl-pds">"</span></span>
+        :<span class="pl-e">key</span>=<span class="pl-s"><span class="pl-pds">"</span>color.text<span class="pl-pds">"</span></span>
+    &gt;{{color.text}}&lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;
+
+<span class="pl-c">&lt;!-- Vue1.0 --&gt;</span>
+&lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>color-list<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">div</span> 
+        <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>color-item<span class="pl-pds">"</span></span> 
+        <span class="pl-e">v-for</span>=<span class="pl-s"><span class="pl-pds">"</span>color in colors<span class="pl-pds">"</span></span> <span class="pl-e">v-dragging</span>=<span class="pl-s"><span class="pl-pds">"</span>{ item: color, list: colors, group: 'color' }<span class="pl-pds">"</span></span>
+        <span class="pl-e">track-by</span>=<span class="pl-s"><span class="pl-pds">"</span>color.text<span class="pl-pds">"</span></span>
+    &gt;{{color.text}}&lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h1>
+
+<p><a href="http://opensource.org/licenses/MIT">The MIT License</a></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/hilongjw/vue-draging">Vue-draging</a> is maintained by <a href="https://github.com/hilongjw">hilongjw</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
