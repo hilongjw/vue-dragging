@@ -1,9 +1,10 @@
-Vue-dragging
+Awe-dnd
 ========
+Makes your elements draggable in Vue. 
 
-see demo: [http://hilongjw.github.io/vue-dragging/](http://hilongjw.github.io/vue-dragging/)
+See Demo: [http://hilongjw.github.io/vue-dragging/](http://hilongjw.github.io/vue-dragging/)
 
-Makes your elements draggable in Vue. Some of goals of this project worth noting include:
+Some of goals of this project worth noting include:
 
 * support desktop and mobile 
 * Vue data-driven philosophy
