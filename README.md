@@ -19,7 +19,7 @@ From npm:
 
 ``` sh
 
-$ npm install vue-dragging --save
+$ npm install awe-dragging --save
 
 ```
 
