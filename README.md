@@ -2,6 +2,8 @@ Awe-dnd
 ========
 Makes your elements draggable in Vue. 
 
+![](https://github.com/hilongjw/vue-dragging/blob/master/preview.gif)
+
 See Demo: [http://hilongjw.github.io/vue-dragging/](http://hilongjw.github.io/vue-dragging/)
 
 Some of goals of this project worth noting include:
@@ -9,6 +11,7 @@ Some of goals of this project worth noting include:
 * support desktop and mobile 
 * Vue data-driven philosophy
 * Supports both of Vue 1.0 and Vue 2.0
+
 
 ## Requirements
 
