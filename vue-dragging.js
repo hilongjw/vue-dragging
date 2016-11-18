@@ -27,10 +27,10 @@ class DragData {
 }
 
 const _ = {
-    on(el, type, fn) {
+    on (el, type, fn) {
         el.addEventListener(type, fn)
     },
-    off(el, type, fn) {
+    off (el, type, fn) {
         el.removeEventListener(type, fn)
     },
     addClass (el, cls) {

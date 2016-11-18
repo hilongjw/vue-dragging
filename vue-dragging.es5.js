@@ -1,5 +1,5 @@
 /*!
- * Awe-dnd v0.2.5
+ * Awe-dnd v0.2.7
  * (c) 2016 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -246,7 +246,7 @@ var vueDragging = function (Vue, options) {
                 removeDragItem(this.el, {
                     modifiers: this.modifiers,
                     arg: this.arg,
-                    value: newValue?newValue:{group: this.el.getAttribute('drag_group')},
+                    value: newValue ? newValue : { group: this.el.getAttribute('drag_group') },
                     oldValue: oldValue
                 });
             }
