@@ -221,10 +221,10 @@ export default function (Vue, options) {
                 })
             },
             unbind (newValue, oldValue) {
-                addDragItem(this.el, {
+                removeDragItem(this.el, {
                     modifiers: this.modifiers,
                     arg: this.arg,
-                    value: newValue,
+                    value: newValue?newValue:{group: this.el.getAttribute('drag_group')},
                     oldValue: oldValue
                 })
             }
