@@ -58,7 +58,7 @@ export default function (Vue, options) {
     const dragData = new DragData()
 
     function handleDragStart(e) {
-        const el = e.target
+        const el = getBlockEl(e.target)
         const key = el.getAttribute('drag_group')
         const DDD = dragData.new(key)
         const item = DDD.EL_MAP.get(el)
@@ -101,7 +101,7 @@ export default function (Vue, options) {
         const key = el.getAttribute('drag_group')
         const DDD = dragData.new(key)
 
-        if (el === DDD.Current.el || !el) return
+        if (el === DDD.Current.el) return
 
         let item = DDD.EL_MAP.get(el)
         let indexTo = DDD.List.indexOf(item)
@@ -116,11 +116,11 @@ export default function (Vue, options) {
         _.removeClass(e.target, 'drag-over', 'drag-enter')
     }
 
-    function handleDrag(e) {
+    function handleDrag (e) {
     }
 
-    function handleDragEnd(e) {
-        _.removeClass(e.target, 'dragging', 'drag-over', 'drag-enter')
+    function handleDragEnd (e) {
+        _.removeClass(getBlockEl(e.target), 'dragging', 'drag-over', 'drag-enter')
     }
 
     function handleDrop(e) {
