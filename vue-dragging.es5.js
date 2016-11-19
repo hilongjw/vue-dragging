@@ -1,5 +1,5 @@
 /*!
- * Awe-dnd v0.2.7
+ * Awe-dnd v0.2.8
  * (c) 2016 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -81,7 +81,7 @@ var vueDragging = function (Vue, options) {
     var dragData = new DragData();
 
     function handleDragStart(e) {
-        var el = e.target;
+        var el = getBlockEl(e.target);
         var key = el.getAttribute('drag_group');
         var DDD = dragData.new(key);
         var item = DDD.EL_MAP.get(el);
@@ -124,7 +124,7 @@ var vueDragging = function (Vue, options) {
         var key = el.getAttribute('drag_group');
         var DDD = dragData.new(key);
 
-        if (el === DDD.Current.el || !el) return;
+        if (el === DDD.Current.el) return;
 
         var item = DDD.EL_MAP.get(el);
         var indexTo = DDD.List.indexOf(item);
@@ -142,7 +142,7 @@ var vueDragging = function (Vue, options) {
     function handleDrag(e) {}
 
     function handleDragEnd(e) {
-        _.removeClass(e.target, 'dragging', 'drag-over', 'drag-enter');
+        _.removeClass(getBlockEl(e.target), 'dragging', 'drag-over', 'drag-enter');
     }
 
     function handleDrop(e) {

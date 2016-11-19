@@ -1,6 +1,6 @@
 {
   "name": "awe-dnd",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "makes your elements draggable in Vue",
   "main": "vue-dragging.es5.js",
   "scripts": {
