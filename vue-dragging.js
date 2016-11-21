@@ -25,6 +25,34 @@ class DragData {
         return this.data[key]
     }
 }
+const $dragging = {
+    listeners: {
+        dragged: []
+    },
+    $on (event, func) {
+        this.listeners[event].push(func)
+    },
+    $once (event, func) {
+        const vm = this
+        function on () {
+            vm.$off(event, on)
+            func.apply(vm, arguments)
+        }
+        this.$on(event, on)
+    },
+    $off (event, func) {
+        if (!func) {
+            this.listeners[event] = []
+            return
+        }
+        this.listeners[event].$remove(func)
+    },
+    $emit (event, context) {
+        this.listeners[event].forEach(func => {
+            func(context)
+        })
+    }
+}
 
 const _ = {
     on (el, type, fn) {
@@ -101,6 +129,8 @@ export default function (Vue, options) {
         const key = el.getAttribute('drag_group')
         const DDD = dragData.new(key)
 
+        if (!DDD.Current.el || !DDD.Current.item) return
+
         if (el === DDD.Current.el) return
 
         let item = DDD.EL_MAP.get(el)
@@ -110,6 +140,12 @@ export default function (Vue, options) {
         swapArrayElements(DDD.List, indexFrom, indexTo)
 
         DDD.Current.index = indexTo
+
+        $dragging.$emit('dragged', {
+            draged: DDD.Current.item, 
+            to: item, 
+            value: DDD.value
+        })
     }
 
     function handleDragLeave(e) {
@@ -167,6 +203,7 @@ export default function (Vue, options) {
 
         const DDD = dragData.new(binding.value.group)
 
+        DDD.value = binding.value
         DDD.List = list
         DDD.className = binding.value.className
         DDD.EL_MAP.set(el, item)
@@ -204,6 +241,8 @@ export default function (Vue, options) {
         _.off(el, 'touchmove', handleDragEnter)
         _.off(el, 'touchend', handleDragEnd)
     }
+
+    Vue.prototype.$dragging = $dragging
 
     if (!isPreVue) {
         Vue.directive('dragging', {

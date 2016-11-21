@@ -107,9 +107,33 @@ export default {
     <div 
         class="color-item" 
         v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color' }"
-        track-by="color.text"
+        track-by="text"
     >{{color.text}}</div>
 </div>
+```
+
+#### Event
+
+```html
+<div class="color-list">
+    <div 
+        class="color-item" 
+        v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color', otherData: otherData }"
+        :key="color.text"
+    >{{color.text}}</div>
+</div>
+```
+
+```
+export default {
+  mounted () {
+    this.$dragging.$on('dragged', ({ value }) => {
+      console.log(value.item)
+      console.log(value.list)
+      console.log(value.otherData)
+    })
+  }
+}
 ```
 
 

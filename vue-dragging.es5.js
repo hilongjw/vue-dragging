@@ -1,5 +1,5 @@
 /*!
- * Awe-dnd v0.2.8
+ * Awe-dnd v0.3.0
  * (c) 2016 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -48,6 +48,35 @@ var DragData = function () {
 
     return DragData;
 }();
+
+var $dragging = {
+    listeners: {
+        dragged: []
+    },
+    $on: function $on(event, func) {
+        this.listeners[event].push(func);
+    },
+    $once: function $once(event, func) {
+        var vm = this;
+        function on() {
+            vm.$off(event, on);
+            func.apply(vm, arguments);
+        }
+        this.$on(event, on);
+    },
+    $off: function $off(event, func) {
+        if (!func) {
+            this.listeners[event] = [];
+            return;
+        }
+        this.listeners[event].$remove(func);
+    },
+    $emit: function $emit(event, context) {
+        this.listeners[event].forEach(function (func) {
+            func(context);
+        });
+    }
+};
 
 var _ = {
     on: function on(el, type, fn) {
@@ -124,6 +153,8 @@ var vueDragging = function (Vue, options) {
         var key = el.getAttribute('drag_group');
         var DDD = dragData.new(key);
 
+        if (!DDD.Current.el || !DDD.Current.item) return;
+
         if (el === DDD.Current.el) return;
 
         var item = DDD.EL_MAP.get(el);
@@ -133,6 +164,12 @@ var vueDragging = function (Vue, options) {
         swapArrayElements(DDD.List, indexFrom, indexTo);
 
         DDD.Current.index = indexTo;
+
+        $dragging.$emit('dragged', {
+            draged: DDD.Current.item,
+            to: item,
+            value: DDD.value
+        });
     }
 
     function handleDragLeave(e) {
@@ -189,6 +226,7 @@ var vueDragging = function (Vue, options) {
 
         var DDD = dragData.new(binding.value.group);
 
+        DDD.value = binding.value;
         DDD.List = list;
         DDD.className = binding.value.className;
         DDD.EL_MAP.set(el, item);
@@ -226,6 +264,8 @@ var vueDragging = function (Vue, options) {
         _.off(el, 'touchmove', handleDragEnter);
         _.off(el, 'touchend', handleDragEnd);
     }
+
+    Vue.prototype.$dragging = $dragging;
 
     if (!isPreVue) {
         Vue.directive('dragging', {
