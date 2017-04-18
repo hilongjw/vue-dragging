@@ -132,6 +132,9 @@ export default {
       console.log(value.list)
       console.log(value.otherData)
     })
+    this.$dragging.$on('dragge_end', () => {
+        
+    })
   }
 }
 ```
