@@ -28,7 +28,7 @@ class DragData {
 const $dragging = {
     listeners: {
         dragged: [],
-        dragge_end: []
+        dragend: []
     },
     $on (event, func) {
         this.listeners[event].push(func)
@@ -158,7 +158,7 @@ export default function (Vue, options) {
 
     function handleDragEnd (e) {
         _.removeClass(getBlockEl(e.target), 'dragging', 'drag-over', 'drag-enter')
-        $dragging.$emit('dragge_end')
+        $dragging.$emit('dragend')
     }
 
     function handleDrop(e) {

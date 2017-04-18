@@ -52,7 +52,7 @@ var DragData = function () {
 var $dragging = {
     listeners: {
         dragged: [],
-        dragge_end: []
+        dragend: []
     },
     $on: function $on(event, func) {
         this.listeners[event].push(func);
@@ -181,7 +181,7 @@ var vueDragging = function (Vue, options) {
 
     function handleDragEnd(e) {
         _.removeClass(getBlockEl(e.target), 'dragging', 'drag-over', 'drag-enter');
-        $dragging.$emit('dragge_end');
+        $dragging.$emit('dragend');
     }
 
     function handleDrop(e) {
