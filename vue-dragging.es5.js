@@ -1,6 +1,6 @@
 /*!
  * Awe-dnd v0.3.0
- * (c) 2016 Awe <hilongjw@gmail.com>
+ * (c) 2017 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -51,7 +51,8 @@ var DragData = function () {
 
 var $dragging = {
     listeners: {
-        dragged: []
+        dragged: [],
+        dragge_end: []
     },
     $on: function $on(event, func) {
         this.listeners[event].push(func);
@@ -180,6 +181,7 @@ var vueDragging = function (Vue, options) {
 
     function handleDragEnd(e) {
         _.removeClass(getBlockEl(e.target), 'dragging', 'drag-over', 'drag-enter');
+        $dragging.$emit('dragge_end');
     }
 
     function handleDrop(e) {
