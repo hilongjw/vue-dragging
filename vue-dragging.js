@@ -1,5 +1,3 @@
-const Map = require('es6-map')
-
 class DragData {
     constructor () {
         this.data = {}
@@ -15,7 +13,7 @@ class DragData {
                     el: null
                 },
                 List: [],
-                EL_MAP: new Map()
+                KEY_MAP: {}
             }
         }
         return this.data[key]
@@ -93,10 +91,10 @@ export default function (Vue, options) {
     function handleDragStart(e) {
         const el = getBlockEl(e.target)
         const key = el.getAttribute('drag_group')
+        const drag_key = el.getAttribute('drag_key')
         const DDD = dragData.new(key)
-        const item = DDD.EL_MAP.get(el)
+        const item = DDD.KEY_MAP[drag_key]
         const index = DDD.List.indexOf(item)
-
         _.addClass(el, 'dragging')
 
         if (e.dataTransfer) {
@@ -132,13 +130,14 @@ export default function (Vue, options) {
         if (!el) return
 
         const key = el.getAttribute('drag_group')
+        const drag_key = el.getAttribute('drag_key')
         const DDD = dragData.new(key)
 
         if (!DDD.Current.el || !DDD.Current.item) return
 
         if (el === DDD.Current.el) return
 
-        let item = DDD.EL_MAP.get(el)
+        let item = DDD.KEY_MAP[drag_key]
         let indexTo = DDD.List.indexOf(item)
         let indexFrom = DDD.List.indexOf(DDD.Current.item)
 
@@ -172,7 +171,7 @@ export default function (Vue, options) {
         }
         return false
     }
-    
+
     function getBlockEl (el) {
         if (!el) return
         while (el.parentNode) {
@@ -206,17 +205,17 @@ export default function (Vue, options) {
     function addDragItem (el, binding, vnode) {
         const item = binding.value.item
         const list = binding.value.list
-
         const DDD = dragData.new(binding.value.group)
 
         DDD.value = binding.value
         DDD.List = list
         DDD.className = binding.value.className
-        DDD.EL_MAP.set(el, item)
+        DDD.KEY_MAP[binding.value.key] = item
 
         el.setAttribute('draggable', 'true')
         el.setAttribute('drag_group', binding.value.group)
         el.setAttribute('drag_block', binding.value.group)
+        el.setAttribute('drag_key', binding.value.key)
 
         _.on(el, 'dragstart', handleDragStart)
         _.on(el, 'dragenter', handleDragEnter)
@@ -233,8 +232,7 @@ export default function (Vue, options) {
 
     function removeDragItem (el, binding, vnode) {
         const DDD = dragData.new(binding.value.group)
-        DDD.EL_MAP.delete(el)
-
+        DDD.KEY_MAP[binding.value.key] = undefined
         _.off(el, 'dragstart', handleDragStart)
         _.off(el, 'dragenter', handleDragEnter)
         _.off(el, 'dragover', handleDragOver)
@@ -249,17 +247,15 @@ export default function (Vue, options) {
     }
 
     Vue.prototype.$dragging = $dragging
-
     if (!isPreVue) {
         Vue.directive('dragging', {
             bind: addDragItem,
-            update: function(el, binding) {
+            update(el, binding) {
                 const DDD = dragData.new(binding.value.group)
                 const item = binding.value.item
-                const list = binding.value.list
-                const old_item = DDD.EL_MAP.get(el)
+                const old_item = DDD.KEY_MAP[binding.value.key]
                 if (item && old_item !== item) {
-                    DDD.EL_MAP.set(el, item)
+                    DDD.KEY_MAP[binding.value.key] = item
                 }
                 if (list && DDD.List !== list) {
                     DDD.List = list

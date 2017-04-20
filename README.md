@@ -71,7 +71,7 @@ export default {
   <div class="color-list">
       <div 
           class="color-item" 
-          v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color' }"
+          v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color', key: color.text }"
           :key="color.text"
       >{{color.text}}</div>
   </div>
@@ -97,7 +97,7 @@ export default {
 <div class="color-list">
     <div 
         class="color-item" 
-        v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color' }"
+        v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color', key: color.text }"
         :key="color.text"
     >{{color.text}}</div>
 </div>
@@ -106,7 +106,7 @@ export default {
 <div class="color-list">
     <div 
         class="color-item" 
-        v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color' }"
+        v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color', key: color.text }"
         track-by="text"
     >{{color.text}}</div>
 </div>
@@ -118,7 +118,7 @@ export default {
 <div class="color-list">
     <div 
         class="color-item" 
-        v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color', otherData: otherData }"
+        v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color', otherData: otherData, key: color.text }"
         :key="color.text"
     >{{color.text}}</div>
 </div>
