@@ -272,6 +272,14 @@ var vueDragging = function (Vue, options) {
     if (!isPreVue) {
         Vue.directive('dragging', {
             bind: addDragItem,
+            update: function update(el, binding) {
+                var DDD = dragData.new(binding.value.group);
+                var item = binding.value.item;
+                var old_item = DDD.EL_MAP.get(el);
+                if (old_item !== item) {
+                    DDD.EL_MAP.set(el, item);
+                }
+            },
             unbind: removeDragItem
         });
     } else {

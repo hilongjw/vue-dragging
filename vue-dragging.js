@@ -249,6 +249,14 @@ export default function (Vue, options) {
     if (!isPreVue) {
         Vue.directive('dragging', {
             bind: addDragItem,
+            update: function(el, binding) {
+                const DDD = dragData.new(binding.value.group)
+                const item = binding.value.item
+                const old_item = DDD.EL_MAP.get(el)
+                if (old_item !== item) {
+                    DDD.EL_MAP.set(el, item)
+                }
+            },
             unbind : removeDragItem
         })
     } else {
