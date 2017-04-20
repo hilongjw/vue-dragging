@@ -61,13 +61,13 @@
     			<div 
     			class="color-item" 
     			v-for="color in colors" 
-    			v-dragging="{ item: color, list: colors, group: 'color' }"
+    			v-dragging="{ item: color, list: colors, group: 'color', key: color.text }"
     			:key="color.text">{{color.text}}</div>
     		</div>
     		<div class="color-show">
     			<div 
     			v-for="color in colors"
-    			v-dragging="{ item: color, list: colors, group: 'color' }"
+    			v-dragging="{ item: color, list: colors, group: 'color', key: color.text }"
     			:key="color.text"
     			class="color-box" 
     			:style="{'background-color': color.text}">
