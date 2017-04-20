@@ -6,7 +6,7 @@
     <meta name="renderer" content="webkit"/>
     <title>vue-dragging</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
-    <script src="https://cdn.bootcss.com/vue/2.1.8/vue.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.2.6/vue.js"></script>
     <!-- <script src="https://cdn.bootcss.com/vue/1.0.28/vue.js"></script> -->
     <script type="text/javascript" src="./lib/vue-dragging.js"></script>
     <style>
@@ -76,10 +76,10 @@
     		</div> -->
     		<!-- vue2 test -->
     		<div class="color-list">
-    			<div 
+    			<div
     			class="color-item" 
     			v-for="color in colors" 
-    			v-dragging="{ item: color, list: colors, group: 'color' }"
+    			v-dragging="{ list: colors, item: color, group: 'color' }"
     			:key="color.text">
     			{{color.text}}
     			</div>
@@ -87,7 +87,7 @@
     		<div class="color-show">
     			<div 
     			v-for="color in colors"
-    			v-dragging="{ item: color, list: colors, group: 'color' }"
+    			v-dragging="{ list: colors, item: color, group: 'color' }"
     			class="color-box" 
     			:style="{'background-color': color.text}"
     			:key="color.text">
@@ -95,6 +95,16 @@
     			</div>
     		</div>
     		<button @click="test">test-bug</button>
+    		<div class="color-show" v-if="colorShow">
+    			<div
+    			v-for="color in colors2"
+    			v-dragging="{ list: colors2, item: color, group: 'color2' }"
+    			class="color-box"
+    			:style="{'background-color': color.text}"
+    			:key="color.text">
+    			{{color.text}}
+    			</div>
+    		</div>
     	</div>
     </div>
     <script>
@@ -103,22 +113,36 @@
     		el: '#root',
     		data: {
     			colors: [{
-		            text: "Aquamarine"
-		        }, {
-		            text: "Hotpink"
-		        }, {
-		            text: "Gold"
-		        }, {
-		            text: "Crimson"
-		        }, {
-		            text: "Blueviolet"
-		        }, {
-		            text: "Lightblue"
-		        }, {
-		            text: "Cornflowerblue"
-		        }, {
-		            text: "Skyblue"
-		        }]
+	            text: "Aquamarine"
+	         }, {
+	             text: "Hotpink"
+	         }, {
+	             text: "Gold"
+	         }, {
+	             text: "Crimson"
+	         }, {
+	             text: "Blueviolet"
+	         }, {
+	             text: "Lightblue"
+	         }, {
+	             text: "Cornflowerblue"
+	         }, {
+	             text: "Skyblue"
+	         }],
+    			colors2: [{
+	             text: "Aquamarine"
+	         }, {
+	             text: "Hotpink"
+	         }, {
+	             text: "Gold"
+	         }, {
+	             text: "Crimson"
+	         }, {
+	             text: "Blueviolet"
+	         }, {
+	             text: "Lightblue"
+	         }],
+	         colorShow: true
     		},
     		methods: {
     			test: function () {
@@ -141,8 +165,16 @@
 			        }, {
 			            text: "Burlywood"
 			        }]
-			        
+			     this.colorShow = !this.colorShow
     			}
+    		},
+    		mounted: function() {
+    			this.$dragging.$on('dragged', (data) => {
+    				console.log('dragged', data)
+    			})
+    			this.$dragging.$on('dragend', (data) => {
+    				console.log('dragend', data)
+    			})
     		}
     	})
     </script>

@@ -4,9 +4,9 @@
  * Released under the MIT License.
  */
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global.install = factory());
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.install = factory());
 }(this, (function () { 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -26,11 +26,6 @@ var DragData = function () {
             if (!this.data[key]) {
                 this.data[key] = {
                     className: '',
-                    Current: {
-                        index: 0,
-                        item: null,
-                        el: null
-                    },
                     List: [],
                     KEY_MAP: {}
                 };
@@ -48,38 +43,45 @@ var DragData = function () {
 }();
 
 var $dragging = {
-    listeners: {
-        dragged: [],
-        dragend: []
-    },
+    listeners: {},
     $on: function $on(event, func) {
+        var events = this.listeners[event];
+        if (!events) {
+            this.listeners[event] = [];
+        }
         this.listeners[event].push(func);
     },
     $once: function $once(event, func) {
         var vm = this;
         function on() {
             vm.$off(event, on);
-            func.apply(vm, arguments);
+
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
+
+            func.apply(vm, args);
         }
         this.$on(event, on);
     },
     $off: function $off(event, func) {
-        if (!func) {
+        var events = this.listeners[event];
+        if (!func || !events) {
             this.listeners[event] = [];
             return;
         }
-        this.listeners[event].$remove(func);
+        this.listeners[event] = this.listeners[event].filter(function (i) {
+            return i !== func;
+        });
     },
     $emit: function $emit(event, context) {
-        this.listeners[event].forEach(function (func) {
-            func(context);
-        });
-    } /* ,
-      $setList(group, list) {
-         const DDD = dragData.new(group)
-         DDD.List = list
-      } */
-
+        var events = this.listeners[event];
+        if (events && events.length > 0) {
+            this.listeners[event].forEach(function (func) {
+                func(context);
+            });
+        }
+    }
 };
 var _ = {
     on: function on(el, type, fn) {
@@ -111,6 +113,8 @@ var _ = {
 var vueDragging = function (Vue, options) {
     var isPreVue = Vue.version.split('.')[0] === '1';
     var dragData = new DragData();
+    var isSwap = false;
+    var Current = null;
 
     function handleDragStart(e) {
         var el = getBlockEl(e.target);
@@ -126,10 +130,11 @@ var vueDragging = function (Vue, options) {
             e.dataTransfer.setData('text', JSON.stringify(item));
         }
 
-        DDD.Current = {
+        Current = {
             index: index,
             item: item,
-            el: el
+            el: el,
+            group: key
         };
     }
 
@@ -151,28 +156,27 @@ var vueDragging = function (Vue, options) {
             el = getBlockEl(e.target);
         }
 
-        if (!el) return;
+        if (!el || !Current) return;
 
         var key = el.getAttribute('drag_group');
+        if (key !== Current.group || !Current.el || !Current.item || el === Current.el) return;
         var drag_key = el.getAttribute('drag_key');
         var DDD = dragData.new(key);
-
-        if (!DDD.Current.el || !DDD.Current.item) return;
-
-        if (el === DDD.Current.el) return;
-
         var item = DDD.KEY_MAP[drag_key];
+
+        if (item === Current.item) return;
+
         var indexTo = DDD.List.indexOf(item);
-        var indexFrom = DDD.List.indexOf(DDD.Current.item);
+        var indexFrom = DDD.List.indexOf(Current.item);
 
         swapArrayElements(DDD.List, indexFrom, indexTo);
-
-        DDD.Current.index = indexTo;
-
+        Current.index = indexTo;
+        isSwap = true;
         $dragging.$emit('dragged', {
-            draged: DDD.Current.item,
+            draged: Current.item,
             to: item,
-            value: DDD.value
+            value: DDD.value,
+            gruop: key
         });
     }
 
@@ -183,8 +187,14 @@ var vueDragging = function (Vue, options) {
     function handleDrag(e) {}
 
     function handleDragEnd(e) {
-        _.removeClass(getBlockEl(e.target), 'dragging', 'drag-over', 'drag-enter');
-        $dragging.$emit('dragend');
+        var el = getBlockEl(e.target);
+        _.removeClass(el, 'dragging', 'drag-over', 'drag-enter');
+        Current = null;
+        // if (isSwap) {
+        isSwap = false;
+        var group = el.getAttribute('drag_group');
+        $dragging.$emit('dragend', { group: group });
+        // }
     }
 
     function handleDrop(e) {
@@ -232,10 +242,11 @@ var vueDragging = function (Vue, options) {
 
         var drag_key = isPreVue ? binding.value.key : vnode.key;
         DDD.value = binding.value;
-        DDD.List = list;
         DDD.className = binding.value.className;
         DDD.KEY_MAP[drag_key] = item;
-
+        if (list && DDD.List !== list) {
+            DDD.List = list;
+        }
         el.setAttribute('draggable', 'true');
         el.setAttribute('drag_group', binding.value.group);
         el.setAttribute('drag_block', binding.value.group);
@@ -280,7 +291,7 @@ var vueDragging = function (Vue, options) {
                 var item = binding.value.item;
                 var list = binding.value.list;
 
-                var drag_key = isPreVue ? binding.value.key : vnode.key;
+                var drag_key = vnode.key;
                 var old_item = DDD.KEY_MAP[drag_key];
                 if (item && old_item !== item) {
                     DDD.KEY_MAP[drag_key] = item;
@@ -312,7 +323,7 @@ var vueDragging = function (Vue, options) {
             }
         });
     }
-}
+};
 
 return vueDragging;
 

@@ -7,11 +7,6 @@ class DragData {
         if (!this.data[key]) {
             this.data[key] = {
                 className: '',
-                Current: {
-                    index: 0,
-                    item: null,
-                    el: null
-                },
                 List: [],
                 KEY_MAP: {}
             }
@@ -26,36 +21,38 @@ class DragData {
 
 const $dragging = {
     listeners: {
-        dragged: [],
-        dragend: []
     },
     $on (event, func) {
+        const events = this.listeners[event]
+        if (!events) {
+            this.listeners[event] = []
+        }
         this.listeners[event].push(func)
     },
     $once (event, func) {
         const vm = this
-        function on () {
+        function on (...args) {
             vm.$off(event, on)
-            func.apply(vm, arguments)
+            func.apply(vm, args)
         }
         this.$on(event, on)
     },
     $off (event, func) {
-        if (!func) {
+        const events = this.listeners[event]
+        if (!func || !events) {
             this.listeners[event] = []
             return
         }
-        this.listeners[event].$remove(func)
+        this.listeners[event] = this.listeners[event].filter(i => i !== func)
     },
     $emit (event, context) {
-        this.listeners[event].forEach(func => {
-            func(context)
-        })
-    }/* ,
-    $setList(group, list) {
-        const DDD = dragData.new(group)
-        DDD.List = list
-    } */
+        const events = this.listeners[event]
+        if (events && events.length > 0) {
+            this.listeners[event].forEach(func => {
+                func(context)
+            })
+        }
+    }
 }
 const _ = {
     on (el, type, fn) {
@@ -87,6 +84,8 @@ const _ = {
 export default function (Vue, options) {
     const isPreVue = Vue.version.split('.')[0] === '1'
     const dragData = new DragData()
+    let isSwap = false
+    let Current = null
 
     function handleDragStart(e) {
         const el = getBlockEl(e.target)
@@ -102,10 +101,11 @@ export default function (Vue, options) {
             e.dataTransfer.setData('text', JSON.stringify(item))
         }
 
-        DDD.Current = {
+        Current = {
             index: index,
             item: item,
-            el: el
+            el: el,
+            group: key
         }
     }
 
@@ -127,28 +127,27 @@ export default function (Vue, options) {
             el = getBlockEl(e.target)
         }
 
-        if (!el) return
+        if (!el || !Current) return
 
         const key = el.getAttribute('drag_group')
+        if (key !== Current.group || !Current.el || !Current.item || el === Current.el) return
         const drag_key = el.getAttribute('drag_key')
         const DDD = dragData.new(key)
+        const item = DDD.KEY_MAP[drag_key]
 
-        if (!DDD.Current.el || !DDD.Current.item) return
+        if (item === Current.item) return
 
-        if (el === DDD.Current.el) return
-
-        let item = DDD.KEY_MAP[drag_key]
-        let indexTo = DDD.List.indexOf(item)
-        let indexFrom = DDD.List.indexOf(DDD.Current.item)
+        const indexTo = DDD.List.indexOf(item)
+        const indexFrom = DDD.List.indexOf(Current.item)
 
         swapArrayElements(DDD.List, indexFrom, indexTo)
-
-        DDD.Current.index = indexTo
-
+        Current.index = indexTo
+        isSwap = true
         $dragging.$emit('dragged', {
-            draged: DDD.Current.item, 
-            to: item, 
-            value: DDD.value
+            draged: Current.item,
+            to: item,
+            value: DDD.value,
+            gruop: key
         })
     }
 
@@ -160,8 +159,14 @@ export default function (Vue, options) {
     }
 
     function handleDragEnd (e) {
-        _.removeClass(getBlockEl(e.target), 'dragging', 'drag-over', 'drag-enter')
-        $dragging.$emit('dragend')
+        const el = getBlockEl(e.target)
+        _.removeClass(el, 'dragging', 'drag-over', 'drag-enter')
+        Current = null
+        // if (isSwap) {
+        isSwap = false
+        const group = el.getAttribute('drag_group')
+        $dragging.$emit('dragend', { group })
+        // }
     }
 
     function handleDrop(e) {
@@ -209,10 +214,11 @@ export default function (Vue, options) {
 
         const drag_key = isPreVue? binding.value.key : vnode.key
         DDD.value = binding.value
-        DDD.List = list
         DDD.className = binding.value.className
         DDD.KEY_MAP[drag_key] = item
-
+        if (list && DDD.List !== list) {
+            DDD.List = list
+        }
         el.setAttribute('draggable', 'true')
         el.setAttribute('drag_group', binding.value.group)
         el.setAttribute('drag_block', binding.value.group)
@@ -257,7 +263,7 @@ export default function (Vue, options) {
                 const item = binding.value.item
                 const list = binding.value.list
 
-                const drag_key = isPreVue? binding.value.key : vnode.key
+                const drag_key = vnode.key
                 const old_item = DDD.KEY_MAP[drag_key]
                 if (item && old_item !== item) {
                     DDD.KEY_MAP[drag_key] = item
