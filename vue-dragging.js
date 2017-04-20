@@ -150,7 +150,7 @@ export default function (Vue, options) {
     }
 
     function handleDragLeave(e) {
-        _.removeClass(e.target, 'drag-over', 'drag-enter')
+        _.removeClass(getBlockEl(e.target), 'drag-over', 'drag-enter')
     }
 
     function handleDrag (e) {
@@ -168,11 +168,11 @@ export default function (Vue, options) {
         }
         return false
     }
-
+    
     function getBlockEl (el) {
         if (!el) return
         while (el.parentNode) {
-            if (el.getAttribute('drag_block')) {
+            if (el.getAttribute && el.getAttribute('drag_block')) {
                 return el
                 break
             } else {
