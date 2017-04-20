@@ -13,8 +13,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Map = require('es6-map');
-
 var DragData = function () {
     function DragData() {
         _classCallCheck(this, DragData);
@@ -34,7 +32,7 @@ var DragData = function () {
                         el: null
                     },
                     List: [],
-                    EL_MAP: new Map()
+                    KEY_MAP: {}
                 };
             }
             return this.data[key];
@@ -76,9 +74,13 @@ var $dragging = {
         this.listeners[event].forEach(function (func) {
             func(context);
         });
-    }
-};
+    } /* ,
+      $setList(group, list) {
+         const DDD = dragData.new(group)
+         DDD.List = list
+      } */
 
+};
 var _ = {
     on: function on(el, type, fn) {
         el.addEventListener(type, fn);
@@ -113,10 +115,10 @@ var vueDragging = function (Vue, options) {
     function handleDragStart(e) {
         var el = getBlockEl(e.target);
         var key = el.getAttribute('drag_group');
+        var drag_key = el.getAttribute('drag_key');
         var DDD = dragData.new(key);
-        var item = DDD.EL_MAP.get(el);
+        var item = DDD.KEY_MAP[drag_key];
         var index = DDD.List.indexOf(item);
-
         _.addClass(el, 'dragging');
 
         if (e.dataTransfer) {
@@ -152,13 +154,14 @@ var vueDragging = function (Vue, options) {
         if (!el) return;
 
         var key = el.getAttribute('drag_group');
+        var drag_key = el.getAttribute('drag_key');
         var DDD = dragData.new(key);
 
         if (!DDD.Current.el || !DDD.Current.item) return;
 
         if (el === DDD.Current.el) return;
 
-        var item = DDD.EL_MAP.get(el);
+        var item = DDD.KEY_MAP[drag_key];
         var indexTo = DDD.List.indexOf(item);
         var indexFrom = DDD.List.indexOf(DDD.Current.item);
 
@@ -174,7 +177,7 @@ var vueDragging = function (Vue, options) {
     }
 
     function handleDragLeave(e) {
-        _.removeClass(e.target, 'drag-over', 'drag-enter');
+        _.removeClass(getBlockEl(e.target), 'drag-over', 'drag-enter');
     }
 
     function handleDrag(e) {}
@@ -195,7 +198,7 @@ var vueDragging = function (Vue, options) {
     function getBlockEl(el) {
         if (!el) return;
         while (el.parentNode) {
-            if (el.getAttribute('drag_block')) {
+            if (el.getAttribute && el.getAttribute('drag_block')) {
                 return el;
                 break;
             } else {
@@ -225,17 +228,18 @@ var vueDragging = function (Vue, options) {
     function addDragItem(el, binding, vnode) {
         var item = binding.value.item;
         var list = binding.value.list;
-
         var DDD = dragData.new(binding.value.group);
 
+        var drag_key = isPreVue ? binding.value.key : vnode.key;
         DDD.value = binding.value;
         DDD.List = list;
         DDD.className = binding.value.className;
-        DDD.EL_MAP.set(el, item);
+        DDD.KEY_MAP[drag_key] = item;
 
         el.setAttribute('draggable', 'true');
         el.setAttribute('drag_group', binding.value.group);
         el.setAttribute('drag_block', binding.value.group);
+        el.setAttribute('drag_key', drag_key);
 
         _.on(el, 'dragstart', handleDragStart);
         _.on(el, 'dragenter', handleDragEnter);
@@ -252,8 +256,8 @@ var vueDragging = function (Vue, options) {
 
     function removeDragItem(el, binding, vnode) {
         var DDD = dragData.new(binding.value.group);
-        DDD.EL_MAP.delete(el);
-
+        var drag_key = isPreVue ? binding.value.key : vnode.key;
+        DDD.KEY_MAP[drag_key] = undefined;
         _.off(el, 'dragstart', handleDragStart);
         _.off(el, 'dragenter', handleDragEnter);
         _.off(el, 'dragover', handleDragOver);
@@ -268,18 +272,24 @@ var vueDragging = function (Vue, options) {
     }
 
     Vue.prototype.$dragging = $dragging;
-
     if (!isPreVue) {
         Vue.directive('dragging', {
             bind: addDragItem,
-            update: function update(el, binding) {
+            update: function update(el, binding, vnode) {
                 var DDD = dragData.new(binding.value.group);
                 var item = binding.value.item;
-                var old_item = DDD.EL_MAP.get(el);
-                if (old_item !== item) {
-                    DDD.EL_MAP.set(el, item);
+                var list = binding.value.list;
+
+                var drag_key = isPreVue ? binding.value.key : vnode.key;
+                var old_item = DDD.KEY_MAP[drag_key];
+                if (item && old_item !== item) {
+                    DDD.KEY_MAP[drag_key] = item;
+                }
+                if (list && DDD.List !== list) {
+                    DDD.List = list;
                 }
             },
+
             unbind: removeDragItem
         });
     } else {

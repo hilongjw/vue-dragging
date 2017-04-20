@@ -24,6 +24,39 @@ class DragData {
     }
 }
 
+const $dragging = {
+    listeners: {
+        dragged: [],
+        dragend: []
+    },
+    $on (event, func) {
+        this.listeners[event].push(func)
+    },
+    $once (event, func) {
+        const vm = this
+        function on () {
+            vm.$off(event, on)
+            func.apply(vm, arguments)
+        }
+        this.$on(event, on)
+    },
+    $off (event, func) {
+        if (!func) {
+            this.listeners[event] = []
+            return
+        }
+        this.listeners[event].$remove(func)
+    },
+    $emit (event, context) {
+        this.listeners[event].forEach(func => {
+            func(context)
+        })
+    }/* ,
+    $setList(group, list) {
+        const DDD = dragData.new(group)
+        DDD.List = list
+    } */
+}
 const _ = {
     on (el, type, fn) {
         el.addEventListener(type, fn)
@@ -55,39 +88,6 @@ export default function (Vue, options) {
     const isPreVue = Vue.version.split('.')[0] === '1'
     const dragData = new DragData()
 
-    const $dragging = {
-        listeners: {
-            dragged: [],
-            dragend: []
-        },
-        $on (event, func) {
-            this.listeners[event].push(func)
-        },
-        $once (event, func) {
-            const vm = this
-            function on () {
-                vm.$off(event, on)
-                func.apply(vm, arguments)
-            }
-            this.$on(event, on)
-        },
-        $off (event, func) {
-            if (!func) {
-                this.listeners[event] = []
-                return
-            }
-            this.listeners[event].$remove(func)
-        },
-        $emit (event, context) {
-            this.listeners[event].forEach(func => {
-                func(context)
-            })
-        }/* ,
-        $setList(group, list) {
-            const DDD = dragData.new(group)
-            DDD.List = list
-        } */
-    }
     function handleDragStart(e) {
         const el = getBlockEl(e.target)
         const key = el.getAttribute('drag_group')
@@ -207,15 +207,16 @@ export default function (Vue, options) {
         const list = binding.value.list
         const DDD = dragData.new(binding.value.group)
 
+        const drag_key = isPreVue? binding.value.key : vnode.key
         DDD.value = binding.value
         DDD.List = list
         DDD.className = binding.value.className
-        DDD.KEY_MAP[binding.value.key] = item
+        DDD.KEY_MAP[drag_key] = item
 
         el.setAttribute('draggable', 'true')
         el.setAttribute('drag_group', binding.value.group)
         el.setAttribute('drag_block', binding.value.group)
-        el.setAttribute('drag_key', binding.value.key)
+        el.setAttribute('drag_key', drag_key)
 
         _.on(el, 'dragstart', handleDragStart)
         _.on(el, 'dragenter', handleDragEnter)
@@ -232,7 +233,8 @@ export default function (Vue, options) {
 
     function removeDragItem (el, binding, vnode) {
         const DDD = dragData.new(binding.value.group)
-        DDD.KEY_MAP[binding.value.key] = undefined
+        const drag_key = isPreVue? binding.value.key : vnode.key
+        DDD.KEY_MAP[drag_key] = undefined
         _.off(el, 'dragstart', handleDragStart)
         _.off(el, 'dragenter', handleDragEnter)
         _.off(el, 'dragover', handleDragOver)
@@ -250,12 +252,15 @@ export default function (Vue, options) {
     if (!isPreVue) {
         Vue.directive('dragging', {
             bind: addDragItem,
-            update(el, binding) {
+            update(el, binding, vnode) {
                 const DDD = dragData.new(binding.value.group)
                 const item = binding.value.item
-                const old_item = DDD.KEY_MAP[binding.value.key]
+                const list = binding.value.list
+
+                const drag_key = isPreVue? binding.value.key : vnode.key
+                const old_item = DDD.KEY_MAP[drag_key]
                 if (item && old_item !== item) {
-                    DDD.KEY_MAP[binding.value.key] = item
+                    DDD.KEY_MAP[drag_key] = item
                 }
                 if (list && DDD.List !== list) {
                     DDD.List = list

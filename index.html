@@ -6,7 +6,8 @@
     <meta name="renderer" content="webkit"/>
     <title>vue-dragging</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
-    <script src="https://cdn.bootcss.com/vue/2.2.6/vue.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.1.8/vue.js"></script>
+    <!-- <script src="https://cdn.bootcss.com/vue/1.0.28/vue.js"></script> -->
     <script type="text/javascript" src="./lib/vue-dragging.js"></script>
     <style>
     	body{font-family:Helvetica,sans-serif}
@@ -57,24 +58,43 @@
 <body>
     <div id="root">
     	<div class="playground">
-    		<div class="color-list">
+    		<!-- vue1 test -->
+    		<!-- <div class="color-list">
     			<div 
     			class="color-item" 
     			v-for="color in colors" 
-    			v-dragging="{ item: color, list: colors, group: 'color', key: color.text }"
-    			:key="color.text">{{color.text}}</div>
+    			v-dragging="{ item: color, list: colors, group: 'color', key: color.text }">{{color.text}}</div>
     		</div>
     		<div class="color-show">
     			<div 
     			v-for="color in colors"
     			v-dragging="{ item: color, list: colors, group: 'color', key: color.text }"
-    			:key="color.text"
     			class="color-box" 
     			:style="{'background-color': color.text}">
     			{{color.text}}
     			</div>
+    		</div> -->
+    		<!-- vue2 test -->
+    		<div class="color-list">
+    			<div 
+    			class="color-item" 
+    			v-for="color in colors" 
+    			v-dragging="{ item: color, list: colors, group: 'color' }"
+    			:key="color.text">
+    			{{color.text}}
+    			</div>
     		</div>
-    		<button @click="test">测试bug</button>
+    		<div class="color-show">
+    			<div 
+    			v-for="color in colors"
+    			v-dragging="{ item: color, list: colors, group: 'color' }"
+    			class="color-box" 
+    			:style="{'background-color': color.text}"
+    			:key="color.text">
+    			{{color.text}}
+    			</div>
+    		</div>
+    		<button @click="test">test-bug</button>
     	</div>
     </div>
     <script>
@@ -123,14 +143,6 @@
 			        }]
 			        
     			}
-    		},
-    		mounted: function() {
-    			/*this.$dragging.$setList('color', this.colors)
-    			this.$watch('colors', function() {
-					this.$nextTick(function() {
-    					this.$dragging.$setList('color', this.colors)
-					})
-    			})*/
     		}
     	})
     </script>

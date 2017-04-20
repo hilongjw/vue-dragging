@@ -29,7 +29,7 @@ $ npm install awe-dnd --save
 
 ## Usage
 
-```javascript
+``` javascript
 //main.js
 
 import VueDND from 'awe-dnd'
@@ -37,7 +37,7 @@ import VueDND from 'awe-dnd'
 Vue.use(VueDND)
 ```
 
-```html
+``` html
 <!--your.vue-->
 <script>
 export default {
@@ -71,7 +71,7 @@ export default {
   <div class="color-list">
       <div 
           class="color-item" 
-          v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color', key: color.text }"
+          v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color' }"
           :key="color.text"
       >{{color.text}}</div>
   </div>
@@ -92,12 +92,12 @@ export default {
 
 #### Example
 
-```html
+``` html
 <!-- Vue2.0 -->
 <div class="color-list">
     <div 
         class="color-item" 
-        v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color', key: color.text }"
+        v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color' }"
         :key="color.text"
     >{{color.text}}</div>
 </div>
@@ -114,17 +114,17 @@ export default {
 
 #### Event
 
-```html
+``` html
 <div class="color-list">
     <div 
         class="color-item" 
-        v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color', otherData: otherData, key: color.text }"
+        v-for="color in colors" v-dragging="{ item: color, list: colors, group: 'color', otherData: otherData }"
         :key="color.text"
     >{{color.text}}</div>
 </div>
 ```
 
-```
+``` javascript
 export default {
   mounted () {
     this.$dragging.$on('dragged', ({ value }) => {
