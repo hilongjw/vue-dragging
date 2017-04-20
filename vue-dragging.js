@@ -25,35 +25,6 @@ class DragData {
         return this.data[key]
     }
 }
-const $dragging = {
-    listeners: {
-        dragged: [],
-        dragend: []
-    },
-    $on (event, func) {
-        this.listeners[event].push(func)
-    },
-    $once (event, func) {
-        const vm = this
-        function on () {
-            vm.$off(event, on)
-            func.apply(vm, arguments)
-        }
-        this.$on(event, on)
-    },
-    $off (event, func) {
-        if (!func) {
-            this.listeners[event] = []
-            return
-        }
-        this.listeners[event].$remove(func)
-    },
-    $emit (event, context) {
-        this.listeners[event].forEach(func => {
-            func(context)
-        })
-    }
-}
 
 const _ = {
     on (el, type, fn) {
@@ -86,6 +57,39 @@ export default function (Vue, options) {
     const isPreVue = Vue.version.split('.')[0] === '1'
     const dragData = new DragData()
 
+    const $dragging = {
+        listeners: {
+            dragged: [],
+            dragend: []
+        },
+        $on (event, func) {
+            this.listeners[event].push(func)
+        },
+        $once (event, func) {
+            const vm = this
+            function on () {
+                vm.$off(event, on)
+                func.apply(vm, arguments)
+            }
+            this.$on(event, on)
+        },
+        $off (event, func) {
+            if (!func) {
+                this.listeners[event] = []
+                return
+            }
+            this.listeners[event].$remove(func)
+        },
+        $emit (event, context) {
+            this.listeners[event].forEach(func => {
+                func(context)
+            })
+        }/* ,
+        $setList(group, list) {
+            const DDD = dragData.new(group)
+            DDD.List = list
+        } */
+    }
     function handleDragStart(e) {
         const el = getBlockEl(e.target)
         const key = el.getAttribute('drag_group')
@@ -252,9 +256,13 @@ export default function (Vue, options) {
             update: function(el, binding) {
                 const DDD = dragData.new(binding.value.group)
                 const item = binding.value.item
+                const list = binding.value.list
                 const old_item = DDD.EL_MAP.get(el)
-                if (old_item !== item) {
+                if (item && old_item !== item) {
                     DDD.EL_MAP.set(el, item)
+                }
+                if (list && DDD.List !== list) {
+                    DDD.List = list
                 }
             },
             unbind : removeDragItem
