@@ -48,7 +48,7 @@ const $dragging = {
     $emit (event, context) {
         const events = this.listeners[event]
         if (events && events.length > 0) {
-            this.listeners[event].forEach(func => {
+            events.forEach(func => {
                 func(context)
             })
         }
