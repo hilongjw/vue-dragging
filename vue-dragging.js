@@ -38,17 +38,17 @@ const $dragging = {
         this.$on(event, on)
     },
     $off (event, func) {
-        const events = this.listeners[event]
         if (!func || !events) {
             this.listeners[event] = []
             return
         }
-        this.listeners[event] = this.listeners[event].filter(i => i !== func)
+        const events = this.listeners[event]
+        this.listeners[event] = events.filter(i => i !== func)
     },
     $emit (event, context) {
         const events = this.listeners[event]
         if (events && events.length > 0) {
-            this.listeners[event].forEach(func => {
+            events.forEach(func => {
                 func(context)
             })
         }
