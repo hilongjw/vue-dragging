@@ -65,12 +65,12 @@ var $dragging = {
         this.$on(event, on);
     },
     $off: function $off(event, func) {
+        var events = this.listeners[event];
         if (!func || !events) {
             this.listeners[event] = [];
             return;
         }
-        var events = this.listeners[event];
-        this.listeners[event] = events.filter(function (i) {
+        this.listeners[event] = this.listeners[event].filter(function (i) {
             return i !== func;
         });
     },
