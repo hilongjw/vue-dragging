@@ -6,9 +6,6 @@
   "scripts": {
     "start": "node build"
   },
-  "dependencies": {
-    "es6-map": "^0.1.4"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/hilongjw/vue-draging.git"
@@ -33,11 +30,11 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.14.0",
-    "babel-polyfill": "^6.13.0",
-    "babel-preset-es2015": "^6.14.0",
-    "babel-preset-es2015-rollup": "^1.2.0",
-    "rollup": "^0.35.10",
-    "rollup-plugin-babel": "^2.6.1"
+    "babel-cli": "^6.24.1",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "rollup": "^0.41.6",
+    "rollup-plugin-babel": "^2.7.1"
   }
 }
