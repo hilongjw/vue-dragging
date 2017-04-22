@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
     <script src="https://cdn.bootcss.com/vue/2.2.6/vue.js"></script>
     <!-- <script src="https://cdn.bootcss.com/vue/1.0.28/vue.js"></script> -->
-    <script type="text/javascript" src="./lib/vue-dragging.js"></script>
+    <script type="text/javascript" src="./vue-dragging.es5.js"></script>
     <style>
     	body{font-family:Helvetica,sans-serif}
 	    .playground {
@@ -108,7 +108,7 @@
     	</div>
     </div>
     <script>
-    	Vue.use(VueDragging.default)
+    	Vue.use(VueDragging)
     	new Vue({
     		el: '#root',
     		data: {

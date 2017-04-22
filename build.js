@@ -19,7 +19,7 @@ rollup.rollup({
     return write(path.resolve(__dirname, 'vue-dragging.es5.js'), bundle.generate({
         format: 'umd',
         banner: banner,
-        moduleName: 'install'
+        moduleName: 'VueDragging'
     }).code)
 })
 .then(() => {
