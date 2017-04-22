@@ -169,10 +169,10 @@
     			}
     		},
     		mounted: function() {
-    			this.$dragging.$on('dragged', (data) => {
+    			this.$dragging.$on('dragged', function(data) {
     				console.log('dragged', data)
     			})
-    			this.$dragging.$on('dragend', (data) => {
+    			this.$dragging.$on('dragend', function(data) {
     				console.log('dragend', data)
     			})
     		}
