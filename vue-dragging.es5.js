@@ -65,11 +65,11 @@ var $dragging = {
         this.$on(event, on);
     },
     $off: function $off(event, func) {
+        var events = this.listeners[event];
         if (!func || !events) {
             this.listeners[event] = [];
             return;
         }
-        var events = this.listeners[event];
         this.listeners[event] = events.filter(function (i) {
             return i !== func;
         });
@@ -77,7 +77,7 @@ var $dragging = {
     $emit: function $emit(event, context) {
         var events = this.listeners[event];
         if (events && events.length > 0) {
-            this.listeners[event].forEach(function (func) {
+            events.forEach(function (func) {
                 func(context);
             });
         }
