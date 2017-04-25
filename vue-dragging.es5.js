@@ -77,7 +77,7 @@ var $dragging = {
     $emit: function $emit(event, context) {
         var events = this.listeners[event];
         if (events && events.length > 0) {
-            this.listeners[event].forEach(function (func) {
+            events.forEach(function (func) {
                 func(context);
             });
         }
@@ -176,7 +176,7 @@ var vueDragging = function (Vue, options) {
             draged: Current.item,
             to: item,
             value: DDD.value,
-            gruop: key
+            group: key
         });
     }
 

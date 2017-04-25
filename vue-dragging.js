@@ -147,7 +147,7 @@ export default function (Vue, options) {
             draged: Current.item,
             to: item,
             value: DDD.value,
-            gruop: key
+            group: key
         })
     }
 
