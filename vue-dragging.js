@@ -43,7 +43,7 @@ const $dragging = {
             this.listeners[event] = []
             return
         }
-        this.listeners[event] = events.filter(i => i !== func)
+        this.listeners[event] = this.listeners[event].filter(i => i !== func)
     },
     $emit (event, context) {
         const events = this.listeners[event]
@@ -147,7 +147,7 @@ export default function (Vue, options) {
             draged: Current.item,
             to: item,
             value: DDD.value,
-            gruop: key
+            group: key
         })
     }
 

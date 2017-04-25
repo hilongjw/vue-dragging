@@ -70,7 +70,7 @@ var $dragging = {
             this.listeners[event] = [];
             return;
         }
-        this.listeners[event] = events.filter(function (i) {
+        this.listeners[event] = this.listeners[event].filter(function (i) {
             return i !== func;
         });
     },
@@ -176,7 +176,7 @@ var vueDragging = function (Vue, options) {
             draged: Current.item,
             to: item,
             value: DDD.value,
-            gruop: key
+            group: key
         });
     }
 
