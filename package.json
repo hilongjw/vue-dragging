@@ -31,6 +31,7 @@
   "bugs": {
     "url": "https://github.com/hilongjw/vue-draging/issues"
   },
+  "homePage": "https://github.com/hilongjw/vue-dragging#readme",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.24.1",
