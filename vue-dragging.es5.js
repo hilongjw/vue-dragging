@@ -147,8 +147,8 @@ var vueDragging = function (Vue, options) {
 
     function handleDragEnter(e) {
         var el = void 0;
+	e.stopPropagation();
         if (e.type === 'touchmove') {
-            e.stopPropagation();
             e.preventDefault();
             el = getOverElementFromTouch(e);
             el = getBlockEl(el);
