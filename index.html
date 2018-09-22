@@ -146,12 +146,12 @@
                     <div
                         v-for="color in colors3"
                         v-dragging="{ list: colors3, item: color, group: 'color3', comb: 'isComb' }"
-                        @click="color.isInMulti=!color.isInMulti"
+                        @click="color.isComb=!color.isComb"
                         class="color-box"
                         :style="{'background-color': color.text}"
                         :key="color.text">
                         <div>{{color.text}}</div>
-                        <div class="multi-group-btn">{{color.isInMulti?'√':''}}</div>
+                        <div class="multi-group-btn">{{color.isComb?'√':''}}</div>
                     </div>
                 </div>
             </div>
