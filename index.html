@@ -145,7 +145,7 @@
                 <div class="color-show">
                     <div
                         v-for="color in colors3"
-                        v-dragging="{ list: colors3, item: color, group: 'color3', comb: 'isInMulti' }"
+                        v-dragging="{ list: colors3, item: color, group: 'color3', comb: 'isComb' }"
                         @click="color.isInMulti=!color.isInMulti"
                         class="color-box"
                         :style="{'background-color': color.text}"
@@ -204,7 +204,7 @@
                         {text: "Cornflowerblue"},
                         {text: "Skyblue"},
                         {text: "Burlywood"}
-                    ]
+                        ]
                 }
             },
             mounted: function() {
@@ -217,7 +217,7 @@
 
                 //多个排序
                 this.colors3.forEach((item) => {
-                    Vue.set(item, 'isInMulti', false) // 该元素是否进行多个同时排序 isInMulti为用户自定义属性 需要在comb字段传入相同名称
+                    Vue.set(item, 'isComb', false) // 该元素是否进行多个同时排序 isComb为用户自定义属性 需要在comb字段传入相同名称
                 })
             }
         })
