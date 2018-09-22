@@ -91,9 +91,11 @@ export default function (Vue, options) {
         const el = getBlockEl(e.target)
         const key = el.getAttribute('drag_group')
         const drag_key = el.getAttribute('drag_key')
+        const comb = el.getAttribute('comb')
         const DDD = dragData.new(key)
         const item = DDD.KEY_MAP[drag_key]
         const index = DDD.List.indexOf(item)
+        const groupArr = DDD.List.filter(item => item[comb])
         _.addClass(el, 'dragging')
 
         if (e.dataTransfer) {
@@ -102,10 +104,11 @@ export default function (Vue, options) {
         }
 
         Current = {
-            index: index,
-            item: item,
-            el: el,
-            group: key
+            index,
+            item,
+            el,
+            group: key,
+            groupArr
         }
     }
 
@@ -141,6 +144,18 @@ export default function (Vue, options) {
         const indexFrom = DDD.List.indexOf(Current.item)
 
         swapArrayElements(DDD.List, indexFrom, indexTo)
+
+        Current.groupArr.forEach(item => {
+            if (item != Current.item) {
+                DDD.List.splice(DDD.List.indexOf(item), 1)
+            }
+        })
+
+        let targetIndex = DDD.List.indexOf(Current.item)
+        if (Current.groupArr.length) {
+            DDD.List.splice(targetIndex, 1, ...Current.groupArr)
+        }
+
         Current.index = indexTo
         isSwap = true
         $dragging.$emit('dragged', {
@@ -223,6 +238,7 @@ export default function (Vue, options) {
         el.setAttribute('drag_group', binding.value.group)
         el.setAttribute('drag_block', binding.value.group)
         el.setAttribute('drag_key', drag_key)
+        el.setAttribute('comb', binding.value.comb)
 
         _.on(el, 'dragstart', handleDragStart)
         _.on(el, 'dragenter', handleDragEnter)

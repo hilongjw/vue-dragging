@@ -1,6 +1,6 @@
 /*!
- * Awe-dnd v0.3.0
- * (c) 2017 Awe <hilongjw@gmail.com>
+ * Awe-dnd v0.3.1
+ * (c) 2018 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -10,6 +10,8 @@
 }(this, (function () { 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -120,9 +122,13 @@ var vueDragging = function (Vue, options) {
         var el = getBlockEl(e.target);
         var key = el.getAttribute('drag_group');
         var drag_key = el.getAttribute('drag_key');
+        var comb = el.getAttribute('comb');
         var DDD = dragData.new(key);
         var item = DDD.KEY_MAP[drag_key];
         var index = DDD.List.indexOf(item);
+        var groupArr = DDD.List.filter(function (item) {
+            return item[comb];
+        });
         _.addClass(el, 'dragging');
 
         if (e.dataTransfer) {
@@ -134,7 +140,8 @@ var vueDragging = function (Vue, options) {
             index: index,
             item: item,
             el: el,
-            group: key
+            group: key,
+            groupArr: groupArr
         };
     }
 
@@ -147,8 +154,8 @@ var vueDragging = function (Vue, options) {
 
     function handleDragEnter(e) {
         var el = void 0;
-	e.stopPropagation();
         if (e.type === 'touchmove') {
+            e.stopPropagation();
             e.preventDefault();
             el = getOverElementFromTouch(e);
             el = getBlockEl(el);
@@ -170,6 +177,20 @@ var vueDragging = function (Vue, options) {
         var indexFrom = DDD.List.indexOf(Current.item);
 
         swapArrayElements(DDD.List, indexFrom, indexTo);
+
+        Current.groupArr.forEach(function (item) {
+            if (item != Current.item) {
+                DDD.List.splice(DDD.List.indexOf(item), 1);
+            }
+        });
+
+        var targetIndex = DDD.List.indexOf(Current.item);
+        if (Current.groupArr.length) {
+            var _DDD$List;
+
+            (_DDD$List = DDD.List).splice.apply(_DDD$List, [targetIndex, 1].concat(_toConsumableArray(Current.groupArr)));
+        }
+
         Current.index = indexTo;
         isSwap = true;
         $dragging.$emit('dragged', {
@@ -251,6 +272,7 @@ var vueDragging = function (Vue, options) {
         el.setAttribute('drag_group', binding.value.group);
         el.setAttribute('drag_block', binding.value.group);
         el.setAttribute('drag_key', drag_key);
+        el.setAttribute('comb', binding.value.comb);
 
         _.on(el, 'dragstart', handleDragStart);
         _.on(el, 'dragenter', handleDragEnter);
