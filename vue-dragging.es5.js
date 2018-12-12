@@ -1,5 +1,5 @@
 /*!
- * Awe-dnd v0.3.1
+ * Awe-dnd v0.3.2
  * (c) 2018 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
